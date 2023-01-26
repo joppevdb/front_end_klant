@@ -61,11 +61,15 @@ function open_payment_window(){
     divPayment.classList.remove('invisible');
     page.classList.add('notUsedPage')
 
-    // generate an random qr code
-    // QR code function
+    // close window after 30sec
+    setTimeout(function() { close_payment_window(); }, 30000);
 
 }
 
+function close_payment_window(){
+    divPayment.classList.add('invisible')
+    divPayment.classList.remove('visible')
+}
 
 // load options
 window.api_1 = function api_1() {
@@ -260,7 +264,7 @@ btnOrder.addEventListener('click', function (e){
 
     close_options_window();
     open_payment_window();
-    qrcode.makeCode("test")
+    qrcode.makeCode("https://stellular-genie-b90f30.netlify.app/")
 })
 
 // close window with button
