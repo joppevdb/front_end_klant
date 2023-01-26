@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../front_end_klant/style/style.css">
+    <link rel="stylesheet" href="../front_end_klant/style/order.css">
 
 
 </head>
@@ -15,44 +15,48 @@
 
 
 <main class="container responsive">
-    <div id="pageOrder">
-        <div class="row inner-container">
-            <div class="text-center">
-                <h1>Order</h1>
-                <p>Select the product you want to order.</p>
+    <div>
+        <div id="pageOrder">
+            <div class="row">
+                <div class="text-center col-12">
+                    <h1>Order</h1>
+                    <p>Select the product you want to order.</p>
+                </div>
             </div>
-            <button id="test">test</button>
-            <div class="empty-div"></div>
-            <div>
-                <div id="options" class="invisible">
-                    <div class="row">
-                        <div class="col-6 row">
-                            <button id="buttonSmall" class="col-12">Small</button>
-                            <button id="buttonMedium" class="col-12">Medium</button>
-                            <button id="buttonLarge" class="col-12">Large</button>
-                        </div>
-                        <div class="col-6" id="checkbox">
-                            <div class="col-12">
-                                <label class="row">
-                                    <input type="checkbox" id="milk">
-                                    <p>MILK</p>
-                                </label>
-                            </div>
-                            <div class="col-12">
-                                <label class="row">
-                                    <input type="checkbox" id="sugar">
-                                    <p>SUGAR</p>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-12 text-center mt-4">
-                            <button id="order">order</button>
-                        </div>
+            <div id="producten-container" class="row inner-container">
+            </div>
+        </div>
+
+
+        <div id="options" class="invisible">
+            <div class="row">
+                <div class="col-6 row">
+                    <button id="buttonSmall" class="col-12">Small</button>
+                    <button id="buttonMedium" class="col-12">Medium</button>
+                    <button id="buttonLarge" class="col-12">Large</button>
+                </div>
+                <div class="col-6" id="checkbox">
+                    <div class="col-12">
+                        <label class="row">
+                            <input type="checkbox" id="milk">
+                            <p>MILK</p>
+                        </label>
                     </div>
+                    <div class="col-12">
+                        <label class="row">
+                            <input type="checkbox" id="sugar">
+                            <p>SUGAR</p>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <button id="order">order</button>
                 </div>
             </div>
         </div>
     </div>
+
+
 </main>
 <script src="../front_end_klant/javascript/order.js"></script>
 </body>

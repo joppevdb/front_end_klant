@@ -1,0 +1,11 @@
+.newPage button{
+    background-color: white;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+}
+
+.newPage button:hover{
+    background-color: black;
+    color: white;
+}
