@@ -1,0 +1,134 @@
+#optionMenu{
+    border-color: black ;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+.newPage button{
+    background-color: white;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+}
+
+.newPage button:hover{
+    background-color: black;
+    color: white;
+}
+
+#options{
+    padding: 20px;
+    border-color: black;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: 10px;
+    width: 50%;
+    left: 25%;
+    margin: auto;
+    position: absolute;
+    opacity: 1;
+    z-index: 1;
+}
+
+.empty-div{
+    min-height: 150px;
+}
+.inner-container{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+
+#options button{
+    background-color: white;
+    border-radius: 10px;
+    margin: 5px;
+    height: 30px;
+}
+
+#order{
+    width: 200px;
+}
+
+.koffie{
+    border-color: black;
+    border-radius: 10px;
+    border-style: solid;
+    text-align: center;
+    padding: 10px;
+}
+
+.koffie ul{
+    text-align: left;
+    list-style: none;
+}
+
+.koffie button{
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+}
+
+
+.selectedButton{
+    background-color: black !important;
+    color: white;
+
+}
+
+.notUsed{
+    background-color: gray;
+    opacity: 0.5;
+}
+
+#checkbox{
+    margin: auto;
+    width: 50%;
+    text-align: left;
+    padding-left: 45px;
+}
+
+#checkbox p{
+    padding-left: 10px;
+    margin-bottom: 0px;
+
+}
+
+#checkbox input{
+    margin-top: 7px;
+}
+
+
+input[type="checkbox"]{
+    height: 25px;
+    width: 25px;
+    accent-color: black;
+}
+
+label{
+    font-size: 25px;
+}
+
+.visible{
+    display: block;
+}
+
+.invisible{
+    display: none;
+}
+
+.notUsedPage{
+    opacity:0.2;
+    position:absolute;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    left:0px;
+}
+
+
+
+
