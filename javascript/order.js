@@ -49,6 +49,10 @@ function close_options_window(){
     // options check boxes
     checkboxMilk.checked = false;
     checkboxSugar.checked = false;
+
+    //hide error
+    divError.classList.add('invisible')
+    divError.classList.remove('visible')
 }
 
 // elements to open payment window
@@ -66,9 +70,21 @@ function open_payment_window(){
 
 }
 
+// close payment window
 function close_payment_window(){
     divPayment.classList.add('invisible')
     divPayment.classList.remove('visible')
+
+    // open SVG
+    open_SVG_window()
+}
+// elements to open SVG window
+const divSVG = document.getElementById('coffeeMachine')
+
+// open SVG
+function open_SVG_window(){
+    divSVG.classList.add('visible')
+    divSVG.classList.remove('invisible')
 }
 
 // load options
@@ -242,8 +258,8 @@ btnLarge.addEventListener('click', function (e){
 })
 
 // order
-// button
 const btnOrder = document.getElementById('order')
+const divError = document.getElementById('error')
 
 // actions
 btnOrder.addEventListener('click', function (e){
@@ -252,19 +268,26 @@ btnOrder.addEventListener('click', function (e){
     var isSugarCheked = false;
 
     // check the checkboxes
-    if (checkboxMilk.checked = true){
+    if (checkboxMilk.checked === true){
         isMilkCheked = true;
     }
-    if (checkboxSugar.checked = true){
+    if (checkboxSugar.checked === true){
         isSugarCheked = true;
     }
 
     // json that needs to be sent to api
     var jsonOrder = {'id': productId, 'size':sizeCoffee, 'isMilkChecked': isMilkCheked, 'isSugarChecked': isSugarCheked }
 
-    close_options_window();
-    open_payment_window();
-    qrcode.makeCode("https://stellular-genie-b90f30.netlify.app/")
+    if (sizeCoffee == null){
+        divError.classList.add('visible')
+        divError.classList.remove('invisible')
+    }
+    else{
+        close_options_window();
+        open_payment_window();
+        qrcode.makeCode("https://stellular-genie-b90f30.netlify.app/")
+    }
+
 })
 
 // close window with button

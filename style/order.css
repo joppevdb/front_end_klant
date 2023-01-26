@@ -109,3 +109,18 @@ input[type="checkbox"]{
     left:0px;
 }
 
+#error{
+    border-color: red;
+    border-style: solid;
+    border-radius: 10px;
+
+}
+#error p{
+    padding-top: 10px;
+    color: red;
+}
+
+#coffeeMachine{
+    height: 500px;
+}
+
