@@ -83,8 +83,25 @@ const divSVG = document.getElementById('coffeeMachine')
 
 // open SVG
 function open_SVG_window(){
-    divSVG.classList.add('visible')
-    divSVG.classList.remove('invisible')
+    divSVG.classList.add('visible');
+    divSVG.classList.remove('invisible');
+}
+
+function get_active_user(){
+    // get items from local storage
+    localStorage.setItem("test", "test");
+    localStorage.setItem("credits", "55");
+
+    // get html elements
+    const activeUserName = document.getElementById("activeUsername");
+    const activeUserCredits = document.getElementById("activeUserCredits");
+
+    activeUserName.innerHTML = "USER: " + localStorage.getItem("test");
+    activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits")
+
+
+
+
 }
 
 // load options
@@ -197,6 +214,7 @@ window.api_1 = function api_1() {
 
 // act upon opening page
 api_1();
+get_active_user();
 
 
 
