@@ -20,8 +20,7 @@
         <p>LOGO</p>
         <ul class="nav navbar-nav navbar-right">
             <li id="activeUserCredits"></li>
-            <li><a  id="activeUsername" href="
-            user.html"></a></li>
+            <li><a id="activeUsername" href="user.html"></a></li>
         </ul>
     </nav>
 
@@ -42,8 +41,8 @@
             <div class="row">
                 <div class="col-6 row">
                     <button id="buttonSmall" class="col-12">Small</button>
-                    <button id="buttonMedium" class="col-12">Medium</button>
-                    <button id="buttonLarge" class="col-12">Large</button>
+                    <button id="buttonMedium" class="col-12">Medium (+0.20)</button>
+                    <button id="buttonLarge" class="col-12">Large (+0.40)</button>
                 </div>
                 <div class="col-6" id="checkbox">
                     <div class="col-12">
@@ -72,8 +71,16 @@
         </div>
     </div>
     <div id="payment" class="invisible row text-center extraScreen justify-content-center">
-        <p class="col-12">Pay using the following qr code</p>
-        <div class="col-3 text-center" id="qrcode"></div>
+        <p class="col-12">CHOOSE YOUR PAYMENT OPTION</p>
+        <div class="col-4 m-4">
+            <button id="payWithCredits">
+                USE CREDITS
+            </button>
+        </div>
+        <div class="col-4 m-4">
+            <h4>Payconic</h4>
+            <div id="qrcode"></div>
+        </div>
     </div>
     <div id="coffeeMachine" class="invisible extraScreen">
 

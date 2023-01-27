@@ -18,6 +18,9 @@ const checkboxSugar = document.getElementById('sugar');
 const divOptions = document.getElementById('options');
 const page = document.getElementById('pageOrder');
 
+//
+var isMilkCheked = false;
+var isSugarCheked = false;
 
 // function open options window
 function open_options_window(clicked_id){
@@ -65,9 +68,40 @@ function open_payment_window(){
     divPayment.classList.remove('invisible');
     page.classList.add('notUsedPage')
 
+
+    // get html elements
+    const btnPaymentCredits = document.getElementById('payWithCredits')
+
+    btnPaymentCredits.addEventListener("click", function (e){
+        close_payment_window();
+    })
+
+
+
     // close window after 30sec
     setTimeout(function() { close_payment_window(); }, 30000);
 
+}
+
+async function send_order(){
+    // api
+    const url_api_order = "";
+
+    // send request
+    const responseLogin = await fetch(url_api_order, {
+        "methode": "POST",
+        "header": {
+            "content-type": "application/json"
+        },
+        "body": JSON.stringify({
+            "r_nummer": localStorage.getItem("r_nummer"),
+            "product_id": productId,
+            "size": sizeCoffee,
+            "isMilk": isMilkCheked,
+            "isSugar": isSugarCheked,
+            "paymentMethode": ;
+        })
+    });
 }
 
 // close payment window
@@ -97,11 +131,7 @@ function get_active_user(){
     const activeUserCredits = document.getElementById("activeUserCredits");
 
     activeUserName.innerHTML = "USER: " + localStorage.getItem("test");
-    activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits")
-
-
-
-
+    activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits");
 }
 
 // load options
@@ -281,10 +311,6 @@ const divError = document.getElementById('error')
 
 // actions
 btnOrder.addEventListener('click', function (e){
-    // variables
-    var isMilkCheked = false;
-    var isSugarCheked = false;
-
     // check the checkboxes
     if (checkboxMilk.checked === true){
         isMilkCheked = true;
@@ -293,8 +319,6 @@ btnOrder.addEventListener('click', function (e){
         isSugarCheked = true;
     }
 
-    // json that needs to be sent to api
-    var jsonOrder = {'id': productId, 'size':sizeCoffee, 'isMilkChecked': isMilkCheked, 'isSugarChecked': isSugarCheked }
 
     if (sizeCoffee == null){
         divError.classList.add('visible')
