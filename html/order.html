@@ -16,6 +16,7 @@
 
 
 <main class="container responsive">
+    <!--navigation-->
     <nav class="navbar">
         <p>LOGO</p>
         <ul class="nav navbar-nav navbar-right">
@@ -25,6 +26,7 @@
     </nav>
 
     <div>
+        <!--default page-->
         <div id="pageOrder">
             <div class="row">
                 <div class="text-center col-12">
@@ -36,7 +38,7 @@
             </div>
         </div>
 
-
+        <!--options-->
         <div id="options" class="invisible extraScreen">
             <div class="row">
                 <div class="col-6 row">
@@ -70,6 +72,8 @@
             </div>
         </div>
     </div>
+
+    <!--payment-->
     <div id="payment" class="invisible row text-center extraScreen justify-content-center">
         <p class="col-12">CHOOSE YOUR PAYMENT OPTION</p>
         <div class="col-4 m-4">
@@ -78,10 +82,19 @@
             </button>
         </div>
         <div class="col-4 m-4">
-            <h4>Payconic</h4>
+            <button id="payWithPayconic">
+                USE PAYCONIC
+            </button>
+        </div>
+    </div>
+    <div id="qrcodeWindow" class="invisible row text-center extraScreen justify-content-center">
+        <div>
+            <h4>SCAN THE CODE BELOW</h4>
             <div id="qrcode"></div>
         </div>
     </div>
+
+    <!--SVG of a coffe machine-->
     <div id="coffeeMachine" class="invisible extraScreen">
 
     </div>

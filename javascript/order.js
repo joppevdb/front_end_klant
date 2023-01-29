@@ -1,40 +1,106 @@
-//variables
-var productId = null;
-var qrcode = new QRCode(document.querySelector('#qrcode'), {
-    text: "http://jindo.dev.naver.com/collie",
-    width: 128,
-    height: 128,
-    colorDark : "#000000",
-    colorLight : "#ffffff",
-    correctLevel : QRCode.CorrectLevel.H
-});
-
-
+// html elements
 // checkboxes
 const checkboxMilk = document.getElementById('milk');
 const checkboxSugar = document.getElementById('sugar');
 
-// elements to open option window
+// buttons
+const btnSmall = document.getElementById("buttonSmall");
+const btnMedium = document.getElementById("buttonMedium");
+const btnLarge = document.getElementById("buttonLarge");
+const btnOrder = document.getElementById('order');
+const btnCloseOptions = document.getElementById("closeOptions");
+
+// divs
 const divOptions = document.getElementById('options');
+const divPayment = document.getElementById('payment');
+const divError = document.getElementById('error');
+const divSVG = document.getElementById('coffeeMachine');
+const divQrcode = document.getElementById("qrcodeWindow");
+
+// page
 const page = document.getElementById('pageOrder');
 
-//
+
+// variables
 var isMilkCheked = false;
 var isSugarCheked = false;
+var productId = null;
+var sizeCoffee = null;
+var price = 1;
 
-// function open options window
+
+// functions
+// open windows
+// options
 function open_options_window(clicked_id){
+    // get product_id
     productId = clicked_id;
+
+    // show options
     divOptions.classList.add('visible');
     divOptions.classList.remove('invisible');
+
+    // fade background
     page.classList.add('notUsedPage');
 }
 
-// function close options window
-function close_options_window(){
-    // clear order
-    jsonOrder = "";
+// payment
+function open_payment_window(){
+    // show div on page
+    divPayment.classList.add('visible');
+    divPayment.classList.remove('invisible');
+    page.classList.add('notUsedPage')
+    // boolean payMethode
+    var whichPayMethode = false
 
+
+    // get buttons elements
+    const btnPaymentCredits = document.getElementById('payWithCredits')
+    const btnPaymentPayconic =  document.getElementById("payWithPayconic")
+
+    // action for credits
+    btnPaymentCredits.addEventListener("click", function (e){
+        // close payment window
+        close_payment_window();
+        // open SVG
+        open_SVG_window()
+
+        // send order to api
+        // send_order("credits");
+    });
+
+
+    // action for payconic
+    btnPaymentPayconic.addEventListener('click', function (e){
+        // close payment window
+        open_qr_window();
+        close_payment_window();
+
+        // send order to api
+        // send_order("payconic")
+    });
+
+}
+
+// qrcode
+function open_qr_window(){
+    divQrcode.classList.add("visible");
+    divQrcode.classList.remove("invisible");
+
+    // generate qrcode
+    new QRCode(document.getElementById("qrcode"),"https://stellular-genie-b90f30.netlify.app?price=" + price );
+}
+
+// SVG
+function open_SVG_window(){
+    divSVG.classList.add('visible');
+    divSVG.classList.remove('invisible');
+}
+
+
+// close windows
+// options
+function close_options_window(){
     // clear css
     // window
     divOptions.classList.add('invisible');
@@ -58,34 +124,32 @@ function close_options_window(){
     divError.classList.remove('visible')
 }
 
-// elements to open payment window
-const divPayment = document.getElementById('payment');
+// payment
+function close_payment_window(){
+    divPayment.classList.add('invisible')
+    divPayment.classList.remove('visible')
 
-// function open payment window
-function open_payment_window(){
-    // show div on page
-    divPayment.classList.add('visible');
-    divPayment.classList.remove('invisible');
-    page.classList.add('notUsedPage')
-    // boolean payMethode
-    var whichPayMethode = false
-
-
-    // get html elements
-    const btnPaymentCredits = document.getElementById('payWithCredits')
-
-    btnPaymentCredits.addEventListener("click", function (e){
-        close_payment_window();
-        whichPayMethode = true
-    })
-
-
-
-    // close window after 30sec
-    setTimeout(function() { close_payment_window(); }, 30000);
 
 }
 
+
+// get info about the active user
+function get_active_user(){
+    // get items from local storage
+    localStorage.setItem("test", "test"); // test
+    localStorage.setItem("credits", "55"); // test
+
+    // get html elements
+    const activeUserName = document.getElementById("activeUsername");
+    const activeUserCredits = document.getElementById("activeUserCredits");
+
+    // get the information that is stored locally
+    activeUserName.innerHTML = "USER: " + localStorage.getItem("test");
+    activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits");
+}
+
+
+// send order after payment is selected
 async function send_order(methodePayment){
     // api
     const url_api_order = "";
@@ -107,35 +171,6 @@ async function send_order(methodePayment){
     });
 }
 
-// close payment window
-function close_payment_window(){
-    divPayment.classList.add('invisible')
-    divPayment.classList.remove('visible')
-
-    // open SVG
-    open_SVG_window()
-}
-// elements to open SVG window
-const divSVG = document.getElementById('coffeeMachine')
-
-// open SVG
-function open_SVG_window(){
-    divSVG.classList.add('visible');
-    divSVG.classList.remove('invisible');
-}
-
-function get_active_user(){
-    // get items from local storage
-    localStorage.setItem("test", "test");
-    localStorage.setItem("credits", "55");
-
-    // get html elements
-    const activeUserName = document.getElementById("activeUsername");
-    const activeUserCredits = document.getElementById("activeUserCredits");
-
-    activeUserName.innerHTML = "USER: " + localStorage.getItem("test");
-    activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits");
-}
 
 // load options
 window.api_1 = function api_1() {
@@ -242,24 +277,11 @@ window.api_1 = function api_1() {
         return data
 
     }
-    api_1()
+    api_1();
 }
 
-// act upon opening page
-api_1();
-get_active_user();
 
-
-
-// size order
-// variable
-var sizeCoffee = null;
-
-// buttons to select the coffee size
-const btnSmall = document.getElementById("buttonSmall");
-const btnMedium = document.getElementById("buttonMedium");
-const btnLarge = document.getElementById("buttonLarge");
-
+// button acitons
 // size small selected
 btnSmall.addEventListener('click', function (e){
     // add classes
@@ -274,8 +296,7 @@ btnSmall.addEventListener('click', function (e){
 
     // size
     sizeCoffee = 0;
-
-})
+});
 
 //size medium selected
 btnMedium.addEventListener('click', function (e){
@@ -291,7 +312,9 @@ btnMedium.addEventListener('click', function (e){
 
     // size
     sizeCoffee = 1;
-})
+});
+
+
 //size large selected
 btnLarge.addEventListener('click', function (e){
     //add classes
@@ -306,13 +329,9 @@ btnLarge.addEventListener('click', function (e){
 
     // size
     sizeCoffee = 3;
-})
+});
 
-// order
-const btnOrder = document.getElementById('order')
-const divError = document.getElementById('error')
-
-// actions
+// order -> goes to payment window
 btnOrder.addEventListener('click', function (e){
     // check the checkboxes
     if (checkboxMilk.checked === true){
@@ -322,26 +341,27 @@ btnOrder.addEventListener('click', function (e){
         isSugarCheked = true;
     }
 
-
+    // check for an error
     if (sizeCoffee == null){
-        divError.classList.add('visible')
-        divError.classList.remove('invisible')
+        divError.classList.add('visible');
+        divError.classList.remove('invisible');
     }
+    // continue if there is no error
     else{
         close_options_window();
         open_payment_window();
-        qrcode.makeCode("https://stellular-genie-b90f30.netlify.app/")
     }
+});
 
-})
 
-// close window with button
-const btnCloseOptions = document.getElementById("closeOptions");
-
-// action
+// close options window
 btnCloseOptions.addEventListener('click', function (e){
     close_options_window();
-})
+});
 
+
+//execute actions upon opening page
+api_1();
+get_active_user();
 
 
