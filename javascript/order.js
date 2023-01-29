@@ -63,10 +63,13 @@ function open_payment_window(){
         // close payment window
         close_payment_window();
         // open SVG
-        open_SVG_window()
+        open_SVG_window();
 
         // send order to api
         // send_order("credits");
+
+
+
     });
 
 
@@ -89,6 +92,8 @@ function open_qr_window(){
 
     // generate qrcode
     new QRCode(document.getElementById("qrcode"),"https://stellular-genie-b90f30.netlify.app?price=" + price );
+    setTimeout(function () {close_qrcode_window();}, 15000);
+
 }
 
 // SVG
@@ -129,9 +134,14 @@ function close_payment_window(){
     divPayment.classList.add('invisible')
     divPayment.classList.remove('visible')
 
-
 }
 
+// qrcode
+function close_qrcode_window(){
+    divQrcode.classList.add('invisible');
+    divQrcode.classList.remove('visible');
+    open_SVG_window();
+}
 
 // get info about the active user
 function get_active_user(){
@@ -169,6 +179,8 @@ async function send_order(methodePayment){
             "paymentMethode": methodePayment
         })
     });
+
+    return responseLogin["isSuccesfull"]
 }
 
 

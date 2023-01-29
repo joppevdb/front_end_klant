@@ -24,7 +24,7 @@ btnLogin.addEventListener('click', async function (e) {
             "content-type": "application/json"
         },
         "body": JSON.stringify({
-            "r_nummer": rNumber,
+            "r-nummer": rNumber,
             "password": encryptPassword
         })
     });
@@ -33,14 +33,15 @@ btnLogin.addEventListener('click', async function (e) {
     returnLogin = await responseLogin.json();
 
     // check bool
-    if (returnLogin["isSucces"] === "false") {
+    if (returnLogin["isSucces"] === 0) {
         // show error
         erroLogin.innerHTML = "Login in not correct";
     } else {
         // storage user local
-        localStorage.setItem("username", "test");
-        localStorage.setItem("rnumber", returnLogin["r_nummer"]);
-        localStorage.setItem("isLoggedIn", returnLogin["isSucces"])
+        localStorage.setItem("username", returnLogin["name"]);
+        localStorage.setItem("r-number", returnLogin["r-nummer"]);
+        localStorage.setItem("isLoggedIn", returnLogin["isSucces"]);
+        localStorage.setItem("credits", returnLogin["credit"]);
 
         // redirect to order page
         window.location.replace("http://localhost:63342/html/order.html");

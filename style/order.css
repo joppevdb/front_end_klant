@@ -36,6 +36,7 @@
     border-radius: 10px;
     margin: 5px;
     height: 30px;
+    width: 100%;
 }
 
 /*checkbox*/
@@ -140,6 +141,11 @@ input[type="checkbox"]{
     color: white;
     text-underline: none;
     font-weight: bold;
+}
+
+#coffeeCup{
+    font-size: 300%;
+    padding-left: 10px;
 }
 
 
