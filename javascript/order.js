@@ -67,6 +67,8 @@ function open_payment_window(){
     divPayment.classList.add('visible');
     divPayment.classList.remove('invisible');
     page.classList.add('notUsedPage')
+    // boolean payMethode
+    var whichPayMethode = false
 
 
     // get html elements
@@ -74,6 +76,7 @@ function open_payment_window(){
 
     btnPaymentCredits.addEventListener("click", function (e){
         close_payment_window();
+        whichPayMethode = true
     })
 
 
@@ -83,7 +86,7 @@ function open_payment_window(){
 
 }
 
-async function send_order(){
+async function send_order(methodePayment){
     // api
     const url_api_order = "";
 
@@ -99,7 +102,7 @@ async function send_order(){
             "size": sizeCoffee,
             "isMilk": isMilkCheked,
             "isSugar": isSugarCheked,
-            "paymentMethode": ;
+            "paymentMethode": methodePayment
         })
     });
 }
