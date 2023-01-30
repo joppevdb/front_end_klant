@@ -6,7 +6,7 @@ function load_data_user() {
     const overviewCredit = document.getElementById('overviewCredit');
 
     // show on html
-    overviewName.innerHTML = localStorage.getItem("name");
+    overviewName.innerHTML = localStorage.getItem("username");
     overviewRNumber.innerHTML = localStorage.getItem("r_number");
     overviewCredit.innerHTML = localStorage.getItem("credits");
 }
@@ -45,7 +45,11 @@ async function get_orders(){
     const divOrders = document.getElementById("overviewOrders");
 
     // api part
-    const data = ""
+    const response = await fetch("http://172.24.192.125:8000/products", {
+        "method": "GET"
+    });
+    const data = await response.json();
+    console.log(data);
 
     // clear section for next output
     divOrders.innerHTML = "";

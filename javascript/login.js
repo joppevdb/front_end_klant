@@ -4,8 +4,8 @@ const btnLogin = document.getElementById('loginButton');
 const erroLogin = document.getElementById('errorLogin');
 
 // input
-var rNumber = null;
-var password = null;
+var inputRnumber = null;
+var inputPassword = null;
 
 
 // output
@@ -14,43 +14,40 @@ var returnLogin = null;
 // button login
 btnLogin.addEventListener('click',  async function (e) {
     // get values from form
-    rNumber = document.getElementById('rNumberLogin').value;
-    password = document.getElementById('userPasswordLogin').value;
+    inputRnumber = document.getElementById('rNumberLogin').value;
+    inputPassword = document.getElementById('userPasswordLogin').value;
 
-    console.log(rNumber)
-    console.log(password)
-
-    var user = {
-        "r_nummer": rNumber,
-        "password": password
-    }
-
-    console.log(user)
 
     // send request
-    var responseLogin = await fetch("http://192.168.1.44:8000/login_user", {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(user)
-    });
+    async function api(){
+        const responseLogin = await fetch("http://172.24.192.125:8000/login_user", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                r_number: inputRnumber,
+                password: btoa(inputPassword)
+            }),
+        });
 
-    // get data response
-    returnLogin = await responseLogin.json();
+        returnLogin = await responseLogin.json();
+        console.log(responseLogin);
 
-    // check bool
-    if (returnLogin["isSucces"] === 0) {
-        // show error
-        erroLogin.innerHTML = "Login in not correct";
-    } else {
-        // storage user local
-        localStorage.setItem("username", returnLogin["name"]);
-        localStorage.setItem("r-number", returnLogin["r-nummer"]);
-        localStorage.setItem("isLoggedIn", returnLogin["isSucces"]);
-        localStorage.setItem("credits", returnLogin["credit"]);
+        // check bool
+        if (returnLogin["isSucces"] === 0) {
+            // show error
+            erroLogin.innerHTML = "Login in not correct";
+        } else {
+            // storage user local
+            localStorage.setItem("username", returnLogin["name"]);
+            localStorage.setItem("r_number", returnLogin["r_number"]);
+            localStorage.setItem("isLoggedIn", returnLogin["isSucces"]);
+            localStorage.setItem("credits", returnLogin["credit"]);
 
-        // redirect to order page
-        window.location.replace("http://localhost:63342/html/order.html");
+            // redirect to order page
+            window.location.replace("http://localhost:63342/html/order.html");
+        }
     }
+    api();
 })

@@ -29,12 +29,13 @@ var isSugarCheked = 0;
 var productId = null;
 var sizeCoffee = null;
 var price = 1;
+let returnOrder;
 
 
 // functions
 // open windows
 // options
-function open_options_window(clicked_id){
+function open_options_window(clicked_id) {
     // get product_id
     productId = clicked_id;
 
@@ -47,7 +48,7 @@ function open_options_window(clicked_id){
 }
 
 // payment
-function open_payment_window(){
+async function open_payment_window() {
     // show div on page
     divPayment.classList.add('visible');
     divPayment.classList.remove('invisible');
@@ -55,33 +56,18 @@ function open_payment_window(){
 
     // get buttons elements
     const btnPaymentCredits = document.getElementById('payWithCredits')
-    const btnPaymentPayconic =  document.getElementById("payWithPayconic")
+    const btnPaymentPayconic = document.getElementById("payWithPayconic")
 
     // action for credits
-    btnPaymentCredits.addEventListener("click", function (e){
-        // send order to api
-        var orderSucceFull = send_order("credits");
-        var test = 0;
+    btnPaymentCredits.addEventListener("click", function (e) {
 
-        // error not succesfull
-        if (test === 1){
-            pErrorCredits.classList.add("visible");
-            pErrorCredits.classList.remove("invisible");
-        }
-        else {
-            // close payment window
-            close_payment_window();
-            // open SVG
-            open_SVG_window();
-        }
-
-
+        send_order("credits")
 
     });
 
 
     // action for payconic
-    btnPaymentPayconic.addEventListener('click', function (e){
+    btnPaymentPayconic.addEventListener('click', function (e) {
         // close payment window
         open_qr_window();
         close_payment_window();
@@ -94,18 +80,20 @@ function open_payment_window(){
 }
 
 // qrcode
-function open_qr_window(){
+function open_qr_window() {
     divQrcode.classList.add("visible");
     divQrcode.classList.remove("invisible");
 
     // generate qrcode
-    new QRCode(document.getElementById("qrcode"),"https://stellular-genie-b90f30.netlify.app?price=" + price );
-    setTimeout(function () {close_qrcode_window();}, 15000);
+    new QRCode(document.getElementById("qrcode"), "https://stellular-genie-b90f30.netlify.app?price=" + price);
+    setTimeout(function () {
+        close_qrcode_window();
+    }, 15000);
 
 }
 
 // SVG
-function open_SVG_window(){
+function open_SVG_window() {
     divSVG.classList.add('visible');
     divSVG.classList.remove('invisible');
 }
@@ -113,7 +101,7 @@ function open_SVG_window(){
 
 // close windows
 // options
-function close_options_window(){
+function close_options_window() {
     // clear css
     // window
     divOptions.classList.add('invisible');
@@ -138,59 +126,73 @@ function close_options_window(){
 }
 
 // payment
-function close_payment_window(){
+function close_payment_window() {
     divPayment.classList.add('invisible')
     divPayment.classList.remove('visible')
 
 }
 
 // qrcode
-function close_qrcode_window(){
+function close_qrcode_window() {
     divQrcode.classList.add('invisible');
     divQrcode.classList.remove('visible');
     open_SVG_window();
 }
 
 // get info about the active user
-function get_active_user(){
+function get_active_user() {
     // get html elements
     const activeUserName = document.getElementById("activeUsername");
     const activeUserCredits = document.getElementById("activeUserCredits");
 
     // get the information that is stored locally
-    activeUserName.innerHTML = "USER: " + localStorage.getItem("test");
+    activeUserName.innerHTML = "USER: " + localStorage.getItem("username");
     activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits");
 }
 
 
 // send order after payment is selected
-async function send_order(methodePayment){
+function send_order(methodePayment) {
     // api
-    const url_api_order = "";
+    const url_api_order = "http://172.24.192.125:8000/order";
 
     // send request
-    const responseLogin = await fetch(url_api_order, {
-        "methode": "POST",
-        "header": {
-            "content-type": "application/json"
-        },
-        "body": JSON.stringify({
-            "r-nummer": localStorage.getItem("r_nummer"),
-            "product_id": productId,
-            "size": sizeCoffee,
-            "isMilk": isMilkCheked,
-            "isSugar": isSugarCheked,
-            "paymentMethode": methodePayment
-        })
-    });
+    async function api() {
+        console.log(productId)
+        const responseLogin = await fetch(url_api_order, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            "body": JSON.stringify({
+                r_number: localStorage.getItem("r_number"),
+                product_id: productId,
+                size: sizeCoffee,
+                milk: isMilkCheked,
+                sugar: isSugarCheked,
+                payment: methodePayment
+            }),
+        });
 
-    // response
-    var returnLogin = responseLogin.json();
+        // response
+        returnOrder = await responseLogin.json();
 
-    // set localstorage correct
-    localStorage.setItem("credit", returnLogin["credit"])
 
-    return returnLogin["isSucces"];
+        // set localstorage correct
+        localStorage.setItem("credit", returnOrder["credit"])
+
+        if (returnOrder["isSucces"] == 0) {
+            pErrorCredits.classList.add("visible");
+            pErrorCredits.classList.remove("invisible");
+        } else{
+            // close payment window
+            close_payment_window();
+            // open SVG
+            open_SVG_window();
+        }
+    }
+
+    api();
 }
 
 
@@ -200,18 +202,17 @@ window.api_1 = function api_1() {
     const producten_container = document.getElementById('producten-container');
 
     // url on the raspberry pi
-    const url_api = "http://127.0.0.1:8000/products";
+    const url_api = "http://172.24.192.125:8000/products";
 
     // function to show all products
     async function api_1() {
 
-        // const response = await fetch(url_api, {
-        //     "method": "GET"
-        // });
-        // const data = await response.json();
+        const response = await fetch(url_api, {
+            "method": "GET"
+        });
+        const data = await response.json();
+        console.log(data);
 
-        // test data
-        const data = [{'id': 0, 'name': 'Cappucino', 'prijs': 3.0, 'land': 'Italy', 'discription': 'Empty', 'iscoffee': true}, {'id': 1, 'name': 'Espresso', 'prijs': 2.0, 'land': 'Duitsland', 'discription': 'Empty', 'iscoffee': true}, {'id': 2, 'name': 'Groene_thee', 'prijs': 2.5, 'land': 'Taiwan', 'discription': 'Empty', 'iscoffee': false}, {'id': 3, 'name': 'Ijskoffie', 'prijs': 3.5, 'land': 'België', 'discription': 'Koude koffie met ijs klontjes', 'iscoffee': true}, {'id': 4, 'name': 'Lungo', 'prijs': 1.5, 'land': 'België', 'discription': 'Empty', 'iscoffee': true}, {'id': 5, 'name': 'Munt_thee', 'prijs': 1.2, 'land': 'Nederland', 'discription': 'Thee van munt bladeren', 'iscoffee': false}, {'id': 6, 'name': 'Ristretto', 'prijs': 2.2, 'land': 'Nederland', 'discription': 'Empty', 'iscoffee': true}]
         // Clear section for next output
         producten_container.innerHTML = "";
 
@@ -278,14 +279,14 @@ window.api_1 = function api_1() {
             newH3_titel.innerHTML = data[i].name;
             newP_land.innerHTML = "Country: " + data[i].land;
             newP_prijs.innerHTML = "Price: \u20AC " + data[i].prijs;
-            newP_description.innerHTML ="Description: " + data[i].discription;
+            newP_description.innerHTML = "Description: " + data[i].discription;
             newbutton.innerHTML = "next";
 
             // get id of a product
             newbutton.id = data[i].id;
 
             // open the window with a function
-            newbutton.setAttribute("onclick","open_options_window(this.id)");
+            newbutton.setAttribute("onclick", "open_options_window(this.id)");
 
             // connect elements with div
             newDiv_product.appendChild(newH3_titel);
@@ -299,13 +300,14 @@ window.api_1 = function api_1() {
         return data
 
     }
+
     api_1();
 }
 
 
 // button acitons
 // size small selected
-btnSmall.addEventListener('click', function (e){
+btnSmall.addEventListener('click', function (e) {
     // add classes
     btnSmall.classList.add('selectedButton');
     btnMedium.classList.add('notUsed');
@@ -321,7 +323,7 @@ btnSmall.addEventListener('click', function (e){
 });
 
 //size medium selected
-btnMedium.addEventListener('click', function (e){
+btnMedium.addEventListener('click', function (e) {
     // add classes
     btnMedium.classList.add('selectedButton');
     btnSmall.classList.add('notUsed');
@@ -338,7 +340,7 @@ btnMedium.addEventListener('click', function (e){
 
 
 //size large selected
-btnLarge.addEventListener('click', function (e){
+btnLarge.addEventListener('click', function (e) {
     //add classes
     btnLarge.classList.add('selectedButton');
     btnMedium.classList.add('notUsed');
@@ -354,22 +356,22 @@ btnLarge.addEventListener('click', function (e){
 });
 
 // order -> goes to payment window
-btnOrder.addEventListener('click', function (e){
+btnOrder.addEventListener('click', function (e) {
     // check the checkboxes
-    if (checkboxMilk.checked === true){
+    if (checkboxMilk.checked === true) {
         isMilkCheked = 1;
     }
-    if (checkboxSugar.checked === true){
+    if (checkboxSugar.checked === true) {
         isSugarCheked = 1;
     }
 
     // check for an error
-    if (sizeCoffee == null){
+    if (sizeCoffee == null) {
         divError.classList.add('visible');
         divError.classList.remove('invisible');
     }
     // continue if there is no error
-    else{
+    else {
         close_options_window();
         open_payment_window();
     }
@@ -377,7 +379,7 @@ btnOrder.addEventListener('click', function (e){
 
 
 // close options window
-btnCloseOptions.addEventListener('click', function (e){
+btnCloseOptions.addEventListener('click', function (e) {
     close_options_window();
 });
 
