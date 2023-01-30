@@ -20,10 +20,12 @@ const divQrcode = document.getElementById("qrcodeWindow");
 // page
 const page = document.getElementById('pageOrder');
 
+// p
+const pErrorCredits = document.getElementById("errorCredits");
 
 // variables
-var isMilkCheked = false;
-var isSugarCheked = false;
+var isMilkCheked = 0;
+var isSugarCheked = 0;
 var productId = null;
 var sizeCoffee = null;
 var price = 1;
@@ -50,9 +52,6 @@ function open_payment_window(){
     divPayment.classList.add('visible');
     divPayment.classList.remove('invisible');
     page.classList.add('notUsedPage')
-    // boolean payMethode
-    var whichPayMethode = false
-
 
     // get buttons elements
     const btnPaymentCredits = document.getElementById('payWithCredits')
@@ -60,13 +59,21 @@ function open_payment_window(){
 
     // action for credits
     btnPaymentCredits.addEventListener("click", function (e){
-        // close payment window
-        close_payment_window();
-        // open SVG
-        open_SVG_window();
-
         // send order to api
-        // send_order("credits");
+        var orderSucceFull = send_order("credits");
+        var test = 0;
+
+        // error not succesfull
+        if (test === 1){
+            pErrorCredits.classList.add("visible");
+            pErrorCredits.classList.remove("invisible");
+        }
+        else {
+            // close payment window
+            close_payment_window();
+            // open SVG
+            open_SVG_window();
+        }
 
 
 
@@ -80,7 +87,8 @@ function open_payment_window(){
         close_payment_window();
 
         // send order to api
-        // send_order("payconic")
+        send_order("payconic")
+
     });
 
 }
@@ -145,10 +153,6 @@ function close_qrcode_window(){
 
 // get info about the active user
 function get_active_user(){
-    // get items from local storage
-    localStorage.setItem("test", "test"); // test
-    localStorage.setItem("credits", "55"); // test
-
     // get html elements
     const activeUserName = document.getElementById("activeUsername");
     const activeUserCredits = document.getElementById("activeUserCredits");
@@ -171,7 +175,7 @@ async function send_order(methodePayment){
             "content-type": "application/json"
         },
         "body": JSON.stringify({
-            "r_nummer": localStorage.getItem("r_nummer"),
+            "r-nummer": localStorage.getItem("r_nummer"),
             "product_id": productId,
             "size": sizeCoffee,
             "isMilk": isMilkCheked,
@@ -180,7 +184,13 @@ async function send_order(methodePayment){
         })
     });
 
-    return responseLogin["isSuccesfull"]
+    // response
+    var returnLogin = responseLogin.json();
+
+    // set localstorage correct
+    localStorage.setItem("credit", returnLogin["credit"])
+
+    return returnLogin["isSucces"];
 }
 
 
@@ -222,13 +232,13 @@ window.api_1 = function api_1() {
 
 
             // header with name
-            var newH1_titel = document.createElement('h3');
+            var newH3_titel = document.createElement('h3');
 
             // add class
-            newH1_titel.className = 'product-name';
+            newH3_titel.className = 'product-name';
 
             // add bootstrap
-            newH1_titel.classList.add('col-12');
+            newH3_titel.classList.add('col-12');
 
             // country of the product
             var newP_land = document.createElement('p');
@@ -265,7 +275,7 @@ window.api_1 = function api_1() {
             newbutton.classList.add('mx-auto');
 
             // fill elements with data from api
-            newH1_titel.innerHTML = data[i].name;
+            newH3_titel.innerHTML = data[i].name;
             newP_land.innerHTML = "Country: " + data[i].land;
             newP_prijs.innerHTML = "Price: \u20AC " + data[i].prijs;
             newP_description.innerHTML ="Description: " + data[i].discription;
@@ -278,7 +288,7 @@ window.api_1 = function api_1() {
             newbutton.setAttribute("onclick","open_options_window(this.id)");
 
             // connect elements with div
-            newDiv_product.appendChild(newH1_titel);
+            newDiv_product.appendChild(newH3_titel);
             newDiv_product.appendChild(newP_land);
             newDiv_product.appendChild(newP_prijs);
             newDiv_product.appendChild(newP_description);
@@ -347,10 +357,10 @@ btnLarge.addEventListener('click', function (e){
 btnOrder.addEventListener('click', function (e){
     // check the checkboxes
     if (checkboxMilk.checked === true){
-        isMilkCheked = true;
+        isMilkCheked = 1;
     }
     if (checkboxSugar.checked === true){
-        isSugarCheked = true;
+        isSugarCheked = 1;
     }
 
     // check for an error

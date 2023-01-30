@@ -1,32 +1,39 @@
 // variables
 // html elements
-const btnLogin = document.getElementById('login')
-const erroLogin = document.getElementById('errorLogin')
+const btnLogin = document.getElementById('loginButton');
+const erroLogin = document.getElementById('errorLogin');
 
 // input
 var rNumber = null;
 var password = null;
-var url_api_login = "http://127.0.0.1:8000/register_user";
+
 
 // output
 var returnLogin = null;
 
 // button login
-btnLogin.addEventListener('click', async function (e) {
+btnLogin.addEventListener('click',  async function (e) {
     // get values from form
-    rNumber = document.getElementById('rNumberLogin')
-    password = document.getElementById('userPasswordLogin')
+    rNumber = document.getElementById('rNumberLogin').value;
+    password = document.getElementById('userPasswordLogin').value;
+
+    console.log(rNumber)
+    console.log(password)
+
+    var user = {
+        "r_nummer": rNumber,
+        "password": password
+    }
+
+    console.log(user)
 
     // send request
-    const responseLogin = await fetch(url_api_login, {
-        "methode": "POST",
-        "header": {
-            "content-type": "application/json"
+    var responseLogin = await fetch("http://192.168.1.44:8000/login_user", {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json;charset=utf-8'
         },
-        "body": JSON.stringify({
-            "r-nummer": rNumber,
-            "password": encryptPassword
-        })
+        body: JSON.stringify(user)
     });
 
     // get data response

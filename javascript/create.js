@@ -8,7 +8,7 @@ var repeatPassword = null;
 // html elements
 const btnCreate = document.getElementById('createUser')
 const errorCreate = document.getElementById('errorCreate')
-const url_api_create = "http://127.0.0.1:8000/register_user"
+const url_api_create = "http://192.168.1.44:8000/register_user"
 
 // encryption
 var encryptPassword = null;
@@ -36,35 +36,45 @@ btnCreate.addEventListener('click', async function (e) {
         errorCreate.innerHTML = "REPEAT YOUR PASSWORD";
     } else if (password !== repeatPassword) {
         errorCreate.innerHTML = "PASSWORDS ARE NOT THE SAME!";
+    } else {
+        // encrypt password
+        encryptPassword = btoa(password);
+
+        console.log(username)
+        console.log(rNumber)
+        console.log(password)
+
+
+        // sent data to api
+        const responseCreate = await fetch(url_api_create, {
+            method: "POST",
+            header: {
+                "Content-type": "application/json"
+            },
+            body:{
+                "name": username,
+                "password": encryptPassword,
+                "r_nummer": rNumber
+            }
+        });
+
+        // get reponse data
+        returnCreate = await responseCreate.json()
+
+
+        // storage user local
+        localStorage.setItem("username", returnCreate["name"]);
+        localStorage.setItem("rnumber", returnCreate["r_nummer"]);
+        localStorage.setItem("isLoggedIn", returnCreate["isSucces"]);
+        localStorage.setItem("credits", returnCreate["credit"]);
+
+        if (returnCreate["isSucces"] === 0) {
+            // redirect to order page
+            window.location.replace("http:/192.168.1.44/order.html")
+        }
     }
 
-    // encrypt password
-    encryptPassword = btoa(password);
 
-    // sent data to api
-    const responseCreate = await fetch(url_api_create, {
-        "method": "POST",
-        "header": {
-            "content-type": "application/json"
-        },
-        "body": JSON.stringify({
-            "name": username,
-            "r_nummer": rNumber,
-            "password": encryptPassword
-        })
-    });
-
-    // get reponse data
-    returnCreate = await responseCreate.json()
-    // storage user local
-    localStorage.setItem("username", returnCreate["username"])
-    localStorage.setItem("rnumber", returnCreate["r_nummer"])
-    localStorage.setItem("isLoggedIn", returnCreate["isSucces"])
-
-    if (returnCreate["isSucces"] === "true"){
-        // redirect to order page
-        window.location.replace("http://localhost:63342/html/order.html")
-    }
 })
 
 
