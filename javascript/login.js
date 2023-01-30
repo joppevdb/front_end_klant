@@ -18,8 +18,8 @@ btnLogin.addEventListener('click',  async function (e) {
     inputPassword = document.getElementById('userPasswordLogin').value;
 
     // api url
-    //const api_url_login ="http://172.24.192.125:8000/login_user";
-    const api_url_login ="http://192.168.1.44:8000/login_user";
+    const api_url_login ="http://172.24.192.125:8000/login_user";
+
 
 
     // send request
@@ -50,7 +50,7 @@ btnLogin.addEventListener('click',  async function (e) {
             localStorage.setItem("credits", returnLogin["credit"]);
 
             // redirect to order page
-            window.location.replace("http://localhost:63342/html/order.html");
+            window.location.replace("http://172.24.192.125/order.html");
         }
     }
     api();

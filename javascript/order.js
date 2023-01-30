@@ -60,21 +60,17 @@ async function open_payment_window() {
 
     // action for credits
     btnPaymentCredits.addEventListener("click", function (e) {
-
-        send_order("credits")
+        send_order("credits");
 
     });
 
 
     // action for payconic
     btnPaymentPayconic.addEventListener('click', function (e) {
-        // close payment window
-        open_qr_window();
-        close_payment_window();
+
 
         // send order to api
-        send_order("payconic")
-
+        send_order("payconic");
     });
 
 }
@@ -89,7 +85,6 @@ function open_qr_window() {
     setTimeout(function () {
         close_qrcode_window();
     }, 15000);
-
 }
 
 // SVG
@@ -185,10 +180,16 @@ function send_order(methodePayment) {
             pErrorCredits.classList.add("visible");
             pErrorCredits.classList.remove("invisible");
         } else{
-            // close payment window
-            close_payment_window();
-            // open SVG
-            open_SVG_window();
+            if (methodePayment === "credits"){
+                // close payment window
+                close_payment_window();
+                // open SVG
+                open_SVG_window();
+            }else{
+                // close payment window
+                open_qr_window();
+                close_payment_window();
+            }
         }
     }
     api();
