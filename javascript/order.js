@@ -146,8 +146,8 @@ function get_active_user() {
     const activeUserCredits = document.getElementById("activeUserCredits");
 
     // get the information that is stored locally
-    activeUserName.innerHTML = "USER: " + localStorage.getItem("username");
-    activeUserCredits.innerHTML = "CREDITS: " + localStorage.getItem("credits");
+    activeUserName.innerHTML = "USER: " + sessionStorage.getItem("username");
+    activeUserCredits.innerHTML = "CREDITS: " + sessionStorage.getItem("credits");
 }
 
 
@@ -181,7 +181,7 @@ function send_order(methodePayment) {
         // set localstorage correct
         localStorage.setItem("credit", returnOrder["credit"])
 
-        if (returnOrder["isSucces"] == 0) {
+        if (returnOrder["isSucces"] === 0) {
             pErrorCredits.classList.add("visible");
             pErrorCredits.classList.remove("invisible");
         } else{
@@ -191,7 +191,6 @@ function send_order(methodePayment) {
             open_SVG_window();
         }
     }
-
     api();
 }
 
@@ -199,10 +198,11 @@ function send_order(methodePayment) {
 // load options
 window.api_1 = function api_1() {
     // main div wherein everything needs to be placed
-    const producten_container = document.getElementById('producten-container');
+    const products_container = document.getElementById('producten-container');
 
     // url on the raspberry pi
     const url_api = "http://172.24.192.125:8000/products";
+
 
     // function to show all products
     async function api_1() {
@@ -214,7 +214,7 @@ window.api_1 = function api_1() {
         console.log(data);
 
         // Clear section for next output
-        producten_container.innerHTML = "";
+        products_container.innerHTML = "";
 
         // loop through all products available for machine
         for (var i in data) {
@@ -300,7 +300,6 @@ window.api_1 = function api_1() {
         return data
 
     }
-
     api_1();
 }
 

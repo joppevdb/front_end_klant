@@ -17,10 +17,14 @@ btnLogin.addEventListener('click',  async function (e) {
     inputRnumber = document.getElementById('rNumberLogin').value;
     inputPassword = document.getElementById('userPasswordLogin').value;
 
+    // api url
+    //const api_url_login ="http://172.24.192.125:8000/login_user";
+    const api_url_login ="http://192.168.1.44:8000/login_user";
+
 
     // send request
     async function api(){
-        const responseLogin = await fetch("http://172.24.192.125:8000/login_user", {
+        const responseLogin = await fetch(api_url_login, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json;charset=utf-8',

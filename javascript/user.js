@@ -14,29 +14,29 @@ function load_data_user() {
 
 // add credits to user
 async function add_credits(clicked_id) {
-    console.log(clicked_id)
     // link to api
-    const url_api_credits = "https://localhost:8000/credit";
+    const url_api_credits = "https://172.24.192.125/credit_add";
 
     // request to api
     const responseCredits = await fetch(url_api_credits, {
-        "methode": "POST",
-        "header": {
+        methode: "POST",
+        headers: {
             "content-type": "application/json"
         },
-        "body": JSON.stringify({
-            "r-nummer": localStorage.getItem("r_nummer"),
-            "credit": clicked_id,
-            "opladen": 1
-        })
+        body: JSON.stringify({
+            r_number: localStorage.getItem("r_number"),
+            credit: clicked_id,
+        }),
     });
 
     // get response
     var returnCreditsJson = responseCredits.json();
 
     // update local variable
-    localStorage.setItem("credits", returnCreditsJson["credit"].toString())
+    localStorage.setItem("credits", returnCreditsJson["new_credit"].toString())
 
+    // update
+    load_data_user();
 }
 
 // get users orders
@@ -45,11 +45,11 @@ async function get_orders(){
     const divOrders = document.getElementById("overviewOrders");
 
     // api part
-    const response = await fetch("http://172.24.192.125:8000/products", {
+    const response = await fetch("http://172.24.192.125:8000/user_history/" + localStorage.getItem("r_number"), {
         "method": "GET"
     });
     const data = await response.json();
-    console.log(data);
+
 
     // clear section for next output
     divOrders.innerHTML = "";
@@ -89,9 +89,9 @@ async function get_orders(){
         newP_time_order.classList.add("text-left");
 
         // fill elements with data from api
-        newH3_titel.innerHTML = data[i].product;
-        newP_time_order.innerHTML = data[i].time;
-        newP_machine_id.innerHTML = data[i].machineId;
+        newH3_titel.innerHTML = data[i].datetime;
+        newP_time_order.innerHTML = data[i].product_name;
+        newP_machine_id.innerHTML = data[i].credit;
 
         // connect elements with div
         newDiv_order.appendChild(newH3_titel);
@@ -107,17 +107,19 @@ const btn15Credits = document.getElementById('15credits');
 const btn20Credits = document.getElementById('20credits');
 
 // 10 credits
-btn10Credits.addEventListener('click', function (e){
-    add_credits(10);
-
+btn10Credits.addEventListener('click', async function (e){
+    await add_credits(10);
+    load_data_user();
 })
 // 15 credits
-btn15Credits.addEventListener('click', function (e){
-    add_credits(15);
+btn15Credits.addEventListener('click', async function (e){
+    await add_credits(15);
+    load_data_user();
 })
 // 20 credits
-btn20Credits.addEventListener('click', function (e){
-    add_credits(20);
+btn20Credits.addEventListener('click', async function (e) {
+    await add_credits(20);
+    load_data_user();
 })
 
 load_data_user();
