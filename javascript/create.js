@@ -63,7 +63,7 @@ btnCreate.addEventListener('click', async function (e) {
 
             if (data["isSucces"] === 1) {
                 // redirect to order page
-                window.location.replace("http://172.24.192.125/order.html");
+                window.location.replace("http://172.24.192.125/coffee/order.html");
             }
         }
         await api();

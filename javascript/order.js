@@ -67,8 +67,6 @@ async function open_payment_window() {
 
     // action for payconic
     btnPaymentPayconic.addEventListener('click', function (e) {
-
-
         // send order to api
         send_order("payconic");
     });
@@ -91,6 +89,382 @@ function open_qr_window() {
 function open_SVG_window() {
     divSVG.classList.add('visible');
     divSVG.classList.remove('invisible');
+
+    // This is for nodejs purposes. So only in a terminal not a WEBSITE!
+    console.log(returnOrder);
+
+    // const fs = require('fs');
+    var api_order_reply = returnOrder;
+
+    var api_order_reply_done = {
+        "r-nummer": undefined,
+        "name": undefined,
+        "credit": undefined,
+        "isSucces": undefined,
+        "product": undefined,
+        "is_coffee": undefined,
+        "melk": undefined,
+        "sugar": undefined
+    }
+
+
+// This is for a website
+    var text_box = document.getElementById('text-box');
+
+    var console_screen = document.createElement('div');
+    console_screen.className = 'console_screen';
+    console_screen.innerHTML = "Placeholder";
+    text_box.appendChild(console_screen);
+
+    const message_of_the_day = "Having a good day?"
+// var machine_working = false;
+
+    var json_file_location = "./javascript/machine_status.json";
+
+
+// Koffee procedure variables
+    const beker = document.getElementById('kopje-koffie-goed');
+    const warm_water = document.getElementById('warm-water');
+    const koffie_bonen = document.getElementById('koffie-bonen');
+    const melk = document.getElementById('melk');
+    const sugar = document.getElementById('sugar');
+
+    const vloeistof_1 = document.getElementById('vloeistof-1');
+    const vloeistof_2 = document.getElementById('vloeistof-2');
+    const vloeistof_3 = document.getElementById('vloeistof-3');
+    const vloeistof_4 = document.getElementById('vloeistof-4');
+
+    const beker_niet_goed_text = "Zet een beker op de machine"
+    const begin_text = api_order_reply.product + "<br>" + "is being made"
+    const warm_water_text = "Water is being heated";
+
+    const koffie_bonen_text = "Coffee beans are ground";
+    const koffie_vloeistof_text = "Coffee is being added";
+
+    const thee_text = "Thee is being mixed";
+    const thee_vloeistof_text = "Thee is being added";
+
+    const melk_text = "Milk is being added";
+    const sugar_text = "Sugar is being added";
+    const melk_suger_text = "Milk & Sugar are being added";
+    const end_text = api_order_reply.name + "<br>" + "Enjoy your " + api_order_reply.product;
+    let json;
+
+    function fetchJsonData() {
+        return fetch(json_file_location)
+            .then((response) => response.json())
+            .then((data) => {
+                json = data;
+                console.log(json);
+            });
+    }
+
+
+    const detected_lamp = document.getElementById('defect-lamp');
+    const maintenance_lamp = document.getElementById('maintenance-lamp');
+    const fixed_lamp = document.getElementById('offline-lamp');
+
+    function checkJsonData() {
+        fetchJsonData().then(() => {
+            if (json.detected == 1 && json.confirmed == 0 && json.fixed == 0) {
+                console.log("machine out of service [detected]");
+                detected_lamp.classList.add('detected-lamp');
+                maintenance_lamp.classList.remove('confirmed-lamp');
+                fixed_lamp.classList.remove('fixed-lamp');
+                console_screen.innerHTML = "Machine is Defect";
+                // machine_working = false
+
+                // This will cal this function again and by doing this it will also fetch the data from the file.
+                setTimeout(checkJsonData, 5000);
+            } else {
+                if (json.detected == 0 && json.confirmed == 1 && json.fixed == 0) {
+                    console.log("machine out of service [confirmed]");
+                    detected_lamp.classList.remove('detected-lamp');
+                    maintenance_lamp.classList.add('confirmed-lamp');
+                    fixed_lamp.classList.remove('fixed-lamp');
+                    console_screen.innerHTML = "Machine is Defect";
+                    // machine_working = false
+
+                    // This will cal this function again and by doing this it will also fetch the data from the file.
+                    setTimeout(checkJsonData, 5000);
+                } else {
+                    if (json.detected == 0 && json.confirmed == 0 && json.fixed == 1) {
+                        console.log("machine Working [fixed]");
+                        detected_lamp.classList.remove('detected-lamp');
+                        maintenance_lamp.classList.remove('confirmed-lamp');
+                        fixed_lamp.classList.add('fixed-lamp');
+                        console_screen.innerHTML = message_of_the_day;
+                        // machine_working = true
+
+                        // Koffee procedure
+                        // if (machine_working) {
+                        if (api_order_reply.isSucces == 1) {
+                            // Er is een order en die moet verwerkt worden.
+                            console.log('Er is een order beschikbaar');
+
+                            if (json.beker_detected == 1) {
+                                // Koffie beker is aanwezig begin process.
+                                beker.classList.add('kopje-koffie-opacity-on');
+                                beker.classList.remove('kopje-koffie-animatie');
+                                console_screen.innerHTML = begin_text;
+                                console.log("Beker aanwezig. Begin met procedure");
+
+                                setTimeout(() => {
+                                    console.log(warm_water_text);
+                                    console_screen.innerHTML = warm_water_text;
+                                    warm_water.classList.add("opacity_on_off");
+
+                                    if (api_order_reply.is_coffee == 1) {
+                                        // if it is a sort of coffe continue here
+                                        setTimeout(() => {
+                                            warm_water.classList.remove("opacity_on_off");
+
+                                            console.log(koffie_bonen_text);
+                                            console_screen.innerHTML = koffie_bonen_text;
+                                            koffie_bonen.classList.add("opacity_on_off");
+
+                                            setTimeout(() => {
+                                                console_screen.innerHTML = koffie_vloeistof_text;
+                                                vloeistof_1.classList.add("vloeistof-animatie-koffie");
+                                                vloeistof_2.classList.add("vloeistof-animatie-koffie");
+                                                vloeistof_3.classList.add("vloeistof-animatie-koffie");
+                                                vloeistof_4.classList.add("vloeistof-animatie-koffie");
+
+                                                if (api_order_reply.melk == 1 && api_order_reply.sugar == 1) {
+                                                    // Milk and sugar
+                                                    setTimeout(() => {
+                                                        koffie_bonen.classList.remove("opacity_on_off");
+
+                                                        console.log(melk_text);
+                                                        melk.classList.add("opacity_on_off");
+
+                                                        console.log(sugar_text);
+                                                        sugar.classList.add("opacity_on_off");
+
+                                                        console_screen.innerHTML = melk_suger_text;
+
+                                                        setTimeout(() => {
+                                                            melk.classList.remove("opacity_on_off");
+                                                            sugar.classList.remove("opacity_on_off");
+                                                            console.log(end_text);
+                                                            console_screen.innerHTML = end_text;
+
+                                                            console.log("api variabelen is being deleted");
+
+                                                            api_order_reply = api_order_reply_done;
+
+                                                            beker.classList.remove("kopje-koffie-opacity-on");
+                                                            vloeistof_1.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_2.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_3.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_4.classList.remove("vloeistof-animatie-koffie");
+
+                                                            setTimeout(checkJsonData, 5000);
+
+
+                                                        }, 5000);
+                                                    }, 5000);
+
+                                                } else if (api_order_reply.melk == 1) {
+                                                    // Milk
+                                                    setTimeout(() => {
+                                                        koffie_bonen.classList.remove("opacity_on_off");
+
+                                                        console.log(melk_text);
+                                                        melk.classList.add("opacity_on_off");
+                                                        console_screen.innerHTML = melk_text;
+
+                                                        setTimeout(() => {
+                                                            melk.classList.remove("opacity_on_off");
+                                                            sugar.classList.remove("opacity_on_off");
+
+                                                            console.log(end_text);
+                                                            console_screen.innerHTML = end_text;
+                                                            console.log("api variabelen is being deleted");
+                                                            api_order_reply = api_order_reply_done;
+
+                                                            beker.classList.remove("kopje-koffie-opacity-on");
+                                                            vloeistof_1.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_2.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_3.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_4.classList.remove("vloeistof-animatie-koffie");
+
+                                                            setTimeout(checkJsonData, 5000);
+
+
+                                                        }, 5000);
+                                                    }, 5000);
+                                                } else {
+                                                    // Sugar
+                                                    setTimeout(() => {
+                                                        koffie_bonen.classList.remove("opacity_on_off");
+
+                                                        console.log(sugar_text);
+                                                        sugar.classList.add("opacity_on_off");
+                                                        console_screen.innerHTML = sugar_text;
+
+                                                        setTimeout(() => {
+                                                            melk.classList.remove("opacity_on_off");
+                                                            sugar.classList.remove("opacity_on_off");
+
+                                                            console.log(end_text);
+                                                            console_screen.innerHTML = end_text;
+                                                            console.log("api variabelen is being deleted");
+                                                            api_order_reply = api_order_reply_done;
+
+                                                            beker.classList.remove("kopje-koffie-opacity-on");
+                                                            vloeistof_1.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_2.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_3.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_4.classList.remove("vloeistof-animatie-koffie");
+
+                                                            setTimeout(checkJsonData, 5000);
+
+
+                                                        }, 5000);
+                                                    }, 5000);
+                                                }
+                                            }, 5000);
+
+
+                                        }, 5000);
+                                    } else {
+                                        // if it isn't a sort of coffee then we know it is thee
+                                        setTimeout(() => {
+                                            warm_water.classList.remove("opacity_on_off");
+
+                                            console.log(thee_text);
+                                            console_screen.innerHTML = thee_text;
+
+                                            setTimeout(() => {
+                                                console_screen.innerHTML = thee_vloeistof_text;
+                                                console.log(thee_vloeistof_text);
+                                                vloeistof_1.classList.add("vloeistof-animatie-thee");
+                                                vloeistof_2.classList.add("vloeistof-animatie-thee");
+                                                vloeistof_3.classList.add("vloeistof-animatie-thee");
+                                                vloeistof_4.classList.add("vloeistof-animatie-thee");
+
+                                                if (api_order_reply.melk == 1 && api_order_reply.sugar == 1) {
+                                                    // Milk and sugar
+                                                    setTimeout(() => {
+
+                                                        console.log(melk_text);
+                                                        melk.classList.add("opacity_on_off");
+
+                                                        console.log(sugar_text);
+                                                        sugar.classList.add("opacity_on_off");
+
+                                                        console_screen.innerHTML = melk_suger_text;
+
+                                                        setTimeout(() => {
+                                                            melk.classList.remove("opacity_on_off");
+                                                            sugar.classList.remove("opacity_on_off");
+                                                            console.log(end_text);
+                                                            console_screen.innerHTML = end_text;
+                                                            console.log("api variabelen is being deleted");
+                                                            api_order_reply = api_order_reply_done;
+
+                                                            beker.classList.remove("kopje-koffie-opacity-on");
+                                                            vloeistof_1.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_2.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_3.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_4.classList.remove("vloeistof-animatie-koffie");
+
+                                                            setTimeout(checkJsonData, 5000);
+
+
+                                                        }, 5000);
+                                                    }, 5000);
+
+                                                } else if (api_order_reply.melk == 1) {
+                                                    // Milk
+                                                    setTimeout(() => {
+
+                                                        console.log(melk_text);
+                                                        melk.classList.add("opacity_on_off");
+                                                        console_screen.innerHTML = melk_text;
+
+                                                        setTimeout(() => {
+                                                            melk.classList.remove("opacity_on_off");
+                                                            sugar.classList.remove("opacity_on_off");
+                                                            console.log(end_text);
+                                                            console_screen.innerHTML = end_text;
+                                                            console.log("api variabelen is being deleted");
+                                                            api_order_reply = api_order_reply_done;
+
+                                                            beker.classList.remove("kopje-koffie-opacity-on");
+                                                            vloeistof_1.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_2.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_3.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_4.classList.remove("vloeistof-animatie-koffie");
+
+                                                            setTimeout(checkJsonData, 5000);
+
+
+                                                        }, 5000);
+                                                    }, 5000);
+                                                } else {
+                                                    // Sugar
+                                                    setTimeout(() => {
+
+                                                        console.log(sugar_text);
+                                                        sugar.classList.add("opacity_on_off");
+                                                        console_screen.innerHTML = sugar_text;
+
+                                                        setTimeout(() => {
+                                                            melk.classList.remove("opacity_on_off");
+                                                            sugar.classList.remove("opacity_on_off");
+                                                            console.log(end_text);
+                                                            console_screen.innerHTML = end_text;
+                                                            console.log("api variabelen is being deleted");
+                                                            api_order_reply = api_order_reply_done;
+
+                                                            beker.classList.remove("kopje-koffie-opacity-on");
+                                                            vloeistof_1.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_2.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_3.classList.remove("vloeistof-animatie-koffie");
+                                                            vloeistof_4.classList.remove("vloeistof-animatie-koffie");
+
+                                                            setTimeout(checkJsonData, 5000);
+
+
+                                                        }, 5000);
+                                                    }, 5000);
+                                                }
+
+
+                                            }, 5000);
+
+                                        }, 5000);
+                                    }
+
+
+                                }, 5000);
+
+                            } else {
+                                // Koffie beker is Niet aanwezig Niet beginnen aan process.
+                                beker.classList.add('kopje-koffie-animatie');
+                                beker.classList.add('kopje-koffie-opacity-on');
+                                console_screen.innerHTML = beker_niet_goed_text;
+                                console.log("Beker NIET aanwezig.");
+
+                                setTimeout(checkJsonData, 5000);
+                            }
+
+
+                        } else {
+                            // Er is geen order beschikbaar maar de machine is wel inorde.
+                            console.log("Er is geen order.")
+                            setTimeout(checkJsonData, 5000);
+                        }
+
+                    }
+                }
+            }
+        });
+    }
+
+    checkJsonData();
 }
 
 
@@ -151,6 +525,8 @@ function send_order(methodePayment) {
     // api
     const url_api_order = "http://172.24.192.125:8000/order";
 
+    console.log(sessionStorage.getItem("r_number"));
+
     // send request
     async function api() {
         console.log(productId)
@@ -160,7 +536,7 @@ function send_order(methodePayment) {
                 "Content-type": "application/json"
             },
             "body": JSON.stringify({
-                r_number: localStorage.getItem("r_number"),
+                r_number: sessionStorage.getItem("r_number"),
                 product_id: productId,
                 size: sizeCoffee,
                 milk: isMilkCheked,
@@ -174,24 +550,25 @@ function send_order(methodePayment) {
 
 
         // set localstorage correct
-        localStorage.setItem("credit", returnOrder["credit"])
+        sessionStorage.setItem("credit", returnOrder["credit"])
 
         if (returnOrder["isSucces"] === 0) {
             pErrorCredits.classList.add("visible");
             pErrorCredits.classList.remove("invisible");
-        } else{
-            if (methodePayment === "credits"){
+        } else {
+            if (methodePayment === "credits") {
                 // close payment window
                 close_payment_window();
                 // open SVG
                 open_SVG_window();
-            }else{
+            } else {
                 // close payment window
                 open_qr_window();
                 close_payment_window();
             }
         }
     }
+
     api();
 }
 
@@ -295,12 +672,13 @@ window.api_1 = function api_1() {
             newDiv_product.appendChild(newP_prijs);
             newDiv_product.appendChild(newP_description);
             newDiv_product.appendChild(newbutton);
-            producten_container.appendChild(newDiv_product);
+            products_container.appendChild(newDiv_product);
 
         }
         return data
 
     }
+
     api_1();
 }
 

@@ -44,13 +44,13 @@ btnLogin.addEventListener('click',  async function (e) {
             erroLogin.innerHTML = "Login in not correct";
         } else {
             // storage user local
-            localStorage.setItem("username", returnLogin["name"]);
-            localStorage.setItem("r_number", returnLogin["r_number"]);
-            localStorage.setItem("isLoggedIn", returnLogin["isSucces"]);
-            localStorage.setItem("credits", returnLogin["credit"]);
+            sessionStorage.setItem("username", returnLogin["name"]);
+            sessionStorage.setItem("r_number", returnLogin["r_number"]);
+            sessionStorage.setItem("isLoggedIn", returnLogin["isSucces"]);
+            sessionStorage.setItem("credits", returnLogin["credit"]);
 
             // redirect to order page
-            window.location.replace("http://172.24.192.125/order.html");
+            window.location.replace("http://172.24.192.125/coffee/order.html");
         }
     }
     api();

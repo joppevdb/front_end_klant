@@ -1,0 +1,144 @@
+.koffie-container {
+    position: relative;
+}
+
+#text-box {
+    position: absolute;
+    width: 220px;
+    top: 220px;
+    left: 285px;
+    text-align: center;
+}
+
+#kopje-koffie-goed {
+    opacity: 0;
+}
+
+.kopje-koffie-opacity-on {
+    opacity: 1 !important;
+}
+
+.kopje-koffie-animatie {
+    /* transform: translateX(0); */
+    animation-name: cup_niet_goed;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+#kopje, #kopje_hendel{
+    stroke: gray;
+}
+
+/* p {
+    color: blueviolet;
+} */
+
+
+/* The animation code */
+@keyframes cup_niet_goed {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+
+.console_screen {
+    font-size: 26px;
+}
+
+#koffie-bonen,
+#warm-water,
+#melk,
+#sugar  {
+    opacity: .5;
+}
+
+.opacity_on_off {
+    animation-name: opacity_on_off;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes opacity_on_off {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.2;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* #vloeistof-1,
+#vloeistof-2,
+#vloeistof-3,
+#vloeistof-4 {
+    display: block !important;
+    animation-name: opacity_on_off_vloeistof;
+    animation-iteration-count: 1;
+    fill: brown !important;
+} */
+
+.vloeistof-animatie-koffie {
+    display: block !important;
+    animation-name: opacity_on_off_vloeistof;
+    animation-iteration-count: 1;
+    fill: brown !important;
+}
+
+.vloeistof-animatie-thee {
+    display: block !important;
+    animation-name: opacity_on_off_vloeistof;
+    animation-iteration-count: 1;
+    fill: greenyellow !important;
+}
+
+#vloeistof-1 {
+    animation-duration: 1s;
+}
+
+#vloeistof-2 {
+    animation-duration: 1.4s;
+}
+
+#vloeistof-3 {
+    animation-duration: 1.8s;
+}
+
+#vloeistof-4 {
+    animation-duration: 2.2s;
+}
+
+
+@keyframes opacity_on_off_vloeistof {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+
+.detected-lamp {
+    fill: orange !important;
+}
+
+.confirmed-lamp {
+    fill: blue !important;
+}
+
+.fixed-lamp {
+    fill: green !important;
+}
+

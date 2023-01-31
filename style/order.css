@@ -128,8 +128,12 @@ input[type="checkbox"]{
     color: red;
 }
 
-#coffeeMachine{
-    height: 500px;
+/*#coffeeMachine{*/
+/*    height: 500px;*/
+/*}*/
+
+#svg5 {
+    padding: 10px;
 }
 
 .navbar{
